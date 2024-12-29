@@ -4,8 +4,24 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Music, Users, Settings, User } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useToast } from "@/components/ui/use-toast";
 
 const Index = () => {
+  const { toast } = useToast();
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  useEffect(() => {
+    // Auto-play notification
+    if (!isPlaying) {
+      setIsPlaying(true);
+      toast({
+        title: "Music Starting",
+        description: "The playlist will begin playing automatically",
+      });
+    }
+  }, [isPlaying, toast]);
+
   const activeRooms = [
     {
       id: 1,
@@ -40,6 +56,19 @@ const Index = () => {
       {/* Main Content */}
       <main className="container mx-auto px-4 py-6">
         <div className="grid gap-6">
+          {/* Spotify Embed */}
+          <div className="w-full rounded-lg overflow-hidden shadow-lg">
+            <iframe
+              src="https://open.spotify.com/embed/playlist/0Xu1wysGNLwsuJWNz5bVYN?utm_source=generator&autoplay=1"
+              width="100%"
+              height="352"
+              frameBorder="0"
+              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+              loading="lazy"
+              className="rounded-lg"
+            ></iframe>
+          </div>
+
           {/* Create Room Button */}
           <Button className="w-full" size="lg">
             Create Listening Room

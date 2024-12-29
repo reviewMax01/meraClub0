@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Music, Users, Settings, User } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -25,20 +24,40 @@ const Index = () => {
   const activeRooms = [
     {
       id: 1,
-      name: "Chill Vibes",
-      currentTrack: "Lofi Study Mix",
+      name: "Sigma Music",
+      currentTrack: "Sigma Grindset Mix",
       participants: 4,
       hostAvatar: "/placeholder.svg",
       hostName: "Alex",
+      playlistUrl: "https://open.spotify.com/embed/playlist/0Xu1wysGNLwsuJWNz5bVYN?utm_source=generator&autoplay=1"
     },
     {
       id: 2,
-      name: "Rock Classics",
-      currentTrack: "Sweet Child O' Mine",
+      name: "White 444",
+      currentTrack: "White 444 Mix",
       participants: 6,
       hostAvatar: "/placeholder.svg",
       hostName: "Sarah",
+      playlistUrl: "https://open.spotify.com/embed/playlist/29eHk3jqAaBVd8j2Mo1nxo?utm_source=generator"
     },
+    {
+      id: 3,
+      name: "Phonk",
+      currentTrack: "Phonk Mix",
+      participants: 3,
+      hostAvatar: "/placeholder.svg",
+      hostName: "Mike",
+      playlistUrl: "https://open.spotify.com/embed/playlist/7jYMCARhi5WvrcLEAAuLSX?utm_source=generator"
+    },
+    {
+      id: 4,
+      name: "Kr$na",
+      currentTrack: "Kr$na Mix",
+      participants: 5,
+      hostAvatar: "/placeholder.svg",
+      hostName: "Jay",
+      playlistUrl: "https://open.spotify.com/embed/playlist/5gxkY4SIgFGzmnSUFyCq0t?utm_source=generator"
+    }
   ];
 
   return (
@@ -56,19 +75,6 @@ const Index = () => {
       {/* Main Content */}
       <main className="container mx-auto px-4 py-6">
         <div className="grid gap-6">
-          {/* Spotify Embed */}
-          <div className="w-full rounded-lg overflow-hidden shadow-lg">
-            <iframe
-              src="https://open.spotify.com/embed/playlist/0Xu1wysGNLwsuJWNz5bVYN?utm_source=generator&autoplay=1"
-              width="100%"
-              height="352"
-              frameBorder="0"
-              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-              loading="lazy"
-              className="rounded-lg"
-            ></iframe>
-          </div>
-
           {/* Create Room Button */}
           <Button className="w-full" size="lg">
             Create Listening Room
@@ -101,11 +107,22 @@ const Index = () => {
                     </div>
                   </CardHeader>
                   <CardContent>
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
                       <Music className="h-4 w-4" />
                       <span>{room.currentTrack}</span>
                     </div>
-                    <Button className="w-full mt-4" variant="secondary">
+                    <div className="w-full rounded-lg overflow-hidden shadow-lg mb-4">
+                      <iframe
+                        src={room.playlistUrl}
+                        width="100%"
+                        height="352"
+                        frameBorder="0"
+                        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                        loading="lazy"
+                        className="rounded-lg"
+                      ></iframe>
+                    </div>
+                    <Button className="w-full" variant="secondary">
                       Join Room
                     </Button>
                   </CardContent>

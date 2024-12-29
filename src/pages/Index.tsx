@@ -2,15 +2,15 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Music, Users, Settings, User } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Music, Users, Settings } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
+import LoginPage from "@/components/auth/LoginPage";
 
 const Index = () => {
   const { toast } = useToast();
-  const { user, signInWithGoogle } = useAuth();
+  const { user } = useAuth();
   const [isPlaying, setIsPlaying] = useState(false);
   const [activeTab, setActiveTab] = useState<'music' | 'chat' | 'settings'>('music');
 
@@ -64,19 +64,17 @@ const Index = () => {
   ];
 
   const renderContent = () => {
+    if (!user) {
+      return <LoginPage />;
+    }
+
     switch (activeTab) {
       case 'music':
         return (
           <div className="grid gap-6">
-            {!user ? (
-              <Button onClick={signInWithGoogle} className="w-full" size="lg">
-                Sign in with Google to Join
-              </Button>
-            ) : (
-              <Button className="w-full" size="lg">
-                Create Listening Room
-              </Button>
-            )}
+            <Button className="w-full" size="lg">
+              Create Listening Room
+            </Button>
             <section>
               <h2 className="text-xl font-semibold mb-4">Active Rooms</h2>
               <div className="grid gap-4">
@@ -132,37 +130,25 @@ const Index = () => {
         return (
           <div className="p-4">
             <h2 className="text-xl font-semibold mb-4">Chat Community</h2>
-            {!user ? (
-              <Button onClick={signInWithGoogle} className="w-full" size="lg">
-                Sign in with Google to Chat
-              </Button>
-            ) : (
-              <p className="text-center text-muted-foreground">Chat feature coming soon!</p>
-            )}
+            <p className="text-center text-muted-foreground">Chat feature coming soon!</p>
           </div>
         );
       case 'settings':
         return (
           <div className="p-4">
             <h2 className="text-xl font-semibold mb-4">Settings</h2>
-            {user ? (
-              <div className="space-y-4">
-                <div className="flex items-center gap-4">
-                  <Avatar>
-                    <AvatarImage src={user.photoURL || undefined} />
-                    <AvatarFallback>{user.email?.[0].toUpperCase()}</AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <p className="font-medium">{user.displayName}</p>
-                    <p className="text-sm text-muted-foreground">{user.email}</p>
-                  </div>
+            <div className="space-y-4">
+              <div className="flex items-center gap-4">
+                <Avatar>
+                  <AvatarImage src={user.photoURL || undefined} />
+                  <AvatarFallback>{user.email?.[0].toUpperCase()}</AvatarFallback>
+                </Avatar>
+                <div>
+                  <p className="font-medium">{user.displayName}</p>
+                  <p className="text-sm text-muted-foreground">{user.email}</p>
                 </div>
               </div>
-            ) : (
-              <Button onClick={signInWithGoogle} className="w-full" size="lg">
-                Sign in with Google
-              </Button>
-            )}
+            </div>
           </div>
         );
     }
@@ -186,33 +172,35 @@ const Index = () => {
         {renderContent()}
       </main>
 
-      <nav className="fixed bottom-0 left-0 right-0 border-t bg-background">
-        <div className="container mx-auto px-4">
-          <div className="flex justify-around py-2">
-            <Button
-              variant={activeTab === 'music' ? 'default' : 'ghost'}
-              className="flex-1"
-              onClick={() => setActiveTab('music')}
-            >
-              <Music className="h-5 w-5" />
-            </Button>
-            <Button
-              variant={activeTab === 'chat' ? 'default' : 'ghost'}
-              className="flex-1"
-              onClick={() => setActiveTab('chat')}
-            >
-              <Users className="h-5 w-5" />
-            </Button>
-            <Button
-              variant={activeTab === 'settings' ? 'default' : 'ghost'}
-              className="flex-1"
-              onClick={() => setActiveTab('settings')}
-            >
-              <Settings className="h-5 w-5" />
-            </Button>
+      {user && (
+        <nav className="fixed bottom-0 left-0 right-0 border-t bg-background">
+          <div className="container mx-auto px-4">
+            <div className="flex justify-around py-2">
+              <Button
+                variant={activeTab === 'music' ? 'default' : 'ghost'}
+                className="flex-1"
+                onClick={() => setActiveTab('music')}
+              >
+                <Music className="h-5 w-5" />
+              </Button>
+              <Button
+                variant={activeTab === 'chat' ? 'default' : 'ghost'}
+                className="flex-1"
+                onClick={() => setActiveTab('chat')}
+              >
+                <Users className="h-5 w-5" />
+              </Button>
+              <Button
+                variant={activeTab === 'settings' ? 'default' : 'ghost'}
+                className="flex-1"
+                onClick={() => setActiveTab('settings')}
+              >
+                <Settings className="h-5 w-5" />
+              </Button>
+            </div>
           </div>
-        </div>
-      </nav>
+        </nav>
+      )}
     </div>
   );
 };
